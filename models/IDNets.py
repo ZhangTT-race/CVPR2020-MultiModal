@@ -145,7 +145,7 @@ class idnet(nn.Module):
             x2 = self.branch2(x_input[1])
             x = torch.cat((x1, x2), 1)
         else:
-            x = self.branch(x_input[0])
+            x = self.branch1(x_input[0])
         x = self.features(x)
         x = self.final_DW(x)
 
