@@ -3,6 +3,14 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+#pycharm
+.idea/
+
+# checkpoint
+IDNet/
+IDNets/
+IDNetm/
+
 # C extensions
 *.so
 
