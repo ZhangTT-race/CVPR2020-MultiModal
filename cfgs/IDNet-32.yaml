@@ -1,5 +1,5 @@
 common:
-    arch: IDNetm
+    arch: IDNet
     workers: 1
     batch_size: 32
     epochs: 30
@@ -8,4 +8,4 @@ common:
     momentum: 0.9
     weight_decay: 0.0001
     print_freq: 10
-    save_path: checkpoints/IDNetm
+    save_path: checkpoints/IDNet

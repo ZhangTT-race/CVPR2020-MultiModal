@@ -8,4 +8,4 @@ common:
     momentum: 0.9
     weight_decay: 0.0001
     print_freq: 10
-    save_path: checkpoints/IDNet
+    save_path: checkpoints/IDNets
