@@ -14,7 +14,7 @@ for src_dir in root_dirs:
             continue
         dir_count += 1
         print(dir_count)
-        path_sp = root.split('\\')
+        path_sp = root.split('/')
 
         new_root = str(path_sp[0]) + '_cut'
         for p in path_sp[1:]:
@@ -24,6 +24,8 @@ for src_dir in root_dirs:
         for name in names:
             path = os.path.join(root, name)
             img = cv2.imread(path)
+            if img is None:
+                continue
             left = 0
             up = 0
             right = img.shape[1]  # 103

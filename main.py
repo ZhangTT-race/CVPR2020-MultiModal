@@ -73,6 +73,7 @@ parser.add_argument('--every-decay', default=40, type=int, help='how many epoch 
 parser.add_argument('--fl-gamma', default=3, type=int, help='gamma for Focal Loss')
 parser.add_argument('--modal', default='ir', type=str, help='ir depth or merge')
 parser.add_argument('--sub', default=1, type=int, help='sub protocol')
+parser.add_argument('--train-val', default=False, type=bool, help='sub protocol')
 
 best_prec1 = 0
 
@@ -81,7 +82,7 @@ model_names = sorted(name for name in models.__dict__
                      and callable(models.__dict__[name]))
 
 USE_GPU = torch.cuda.is_available()
-
+torch.multiprocessing.set_sharing_strategy('file_system')
 
 def main():
     global args, best_prec1, USE_GPU, device, sub, modal
@@ -223,25 +224,37 @@ def main():
         # train for one epoch
         train(train_loader, model, criterion, optimizer, epoch)
         # evaluate on validation set
-        prec1 = validate(val_loader, model, criterion, epoch)
-        # remember best prec@1 and save checkpoint
-        is_best = prec1 > best_prec1
-        if is_best:
-            print('epoch: {} The best is {} last best is {}'.format(epoch, prec1, best_prec1))
-        best_prec1 = max(prec1, best_prec1)
+        if args.train_val:
+            prec1 = validate(val_loader, model, criterion, epoch)
+            # remember best prec@1 and save checkpoints
+            is_best = prec1 > best_prec1
+            if is_best:
+                print('epoch: {} The best is {} last best is {}'.format(epoch, prec1, best_prec1))
+            best_prec1 = max(prec1, best_prec1)
 
-        if not os.path.exists(args.save_path):
-            os.mkdir(args.save_path)
-        save_name = '{}/{}_{}_{}_{}_best.pth.tar'.format(args.save_path, sub, modal, args.model_name,
-                                                         epoch) if is_best else \
-            '{}/{}_{}_{}_{}.pth.tar'.format(args.save_path, sub, modal, args.model_name, epoch)
-        save_checkpoint({
-            'epoch': epoch + 1,
-            'arch': args.arch,
-            'state_dict': model.state_dict(),
-            'best_prec1': best_prec1,
-            'optimizer': optimizer.state_dict(),
-        }, filename=save_name)
+            if not os.path.exists(args.save_path):
+                os.mkdir(args.save_path)
+            save_name = '{}/{}_{}_{}_{}_best.pth.tar'.format(args.save_path, sub, modal, args.model_name,
+                                                             epoch) if is_best else \
+                '{}/{}_{}_{}_{}.pth.tar'.format(args.save_path, sub, modal, args.model_name, epoch)
+            save_checkpoint({
+                'epoch': epoch + 1,
+                'arch': args.arch,
+                'state_dict': model.state_dict(),
+                'best_prec1': best_prec1,
+                'optimizer': optimizer.state_dict(),
+            }, filename=save_name)
+        else:
+            if not os.path.exists(args.save_path):
+                os.mkdir(args.save_path)
+            save_name = '{}/{}_{}_{}_{}.pth.tar'.format(args.save_path, sub, modal, args.model_name, epoch)
+            save_checkpoint({
+                'epoch': epoch + 1,
+                'arch': args.arch,
+                'state_dict': model.state_dict(),
+                'best_prec1': best_prec1,
+                'optimizer': optimizer.state_dict(),
+            }, filename=save_name)
 
 
 def train(train_loader, model, criterion, optimizer, epoch):

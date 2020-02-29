@@ -2,7 +2,7 @@ common:
     arch: IDNet
     workers: 1
     batch_size: 32
-    epochs: 30
+    epochs: 40
     policy: "step"
     base_lr: 0.01
     momentum: 0.9

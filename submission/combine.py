@@ -1,12 +1,32 @@
 import os
 import numpy as np
 
-test_result = ['4@1_merge_2020-02-25_21-24-59_IDNets_30_dev_submission.txt',
-               '4@1_merge_2020-02-25_21-30-11_IDNets_30_test_submission.txt',
-               '4@2_merge_2020-02-25_21-26-40_IDNets_30_dev_submission.txt',
-               '4@2_merge_2020-02-25_21-45-03_IDNets_30_test_submission.txt',
-               '4@3_merge_2020-02-25_21-28-18_IDNets_30_dev_submission.txt',
-               '4@3_merge_2020-02-25_21-58-03_IDNets_30_test_submission.txt']
+test_result = []
+
+txts = os.listdir('./')
+for i in range(3):
+    dev_in = False
+    test_in = False
+    for txt in txts:
+        if '4@'+str(i+1) in txt and 'dev' in txt and 'ref' not in txt and not dev_in:
+            print('add '+txt)
+            test_result.append(txt)
+            dev_in = True
+        if '4@'+str(i+1) in txt and 'test' in txt and dev_in:
+            print('add '+ txt)
+            test_result.append(txt)
+            test_in = True
+    if not test_in:
+        for txt in txts:
+            if '4@'+str(i+1) in txt and 'dev' in txt and 'ref' not in txt and not dev_in:
+                print('add '+txt)
+                test_result.append(txt)
+                dev_in = True
+            if '4@'+str(i+1) in txt and 'test' in txt and dev_in:
+                print('add '+ txt)
+                test_result.append(txt)
+                test_in = True
+
 
 submisson = 'submission.txt'
 
@@ -22,7 +42,9 @@ with open(submisson, 'w') as sub_T:
                 line = line.strip()
                 # content = line.replace('/', '')
                 path,score = line.split(' ')
-                video = path.split('cut')[1].split('\\')[0]
+                # print(path.split('cut'))
+                video = path.split('cut')[1].split('/')[1]
+                video = '/'+video
                 video = 'dev' + video if 'dev' in t else 'test' + video
                 if video == last_video:
                     scores.append(float(score))

@@ -44,14 +44,14 @@ def auto_adjust_gamma(image):
 root_dirs = ['train_cut', 'dev_cut', 'test_cut']
 for src_dir in root_dirs:
     dir_count = 0
-    if not os.path.exists(src_dir + '_gamma'):
-        os.mkdir(src_dir + '_gamma')
+    if not os.path.exists(src_dir.replace('cut','gamma')):
+        os.mkdir(src_dir.replace('cut','gamma'))
     for root, dirs, names in os.walk(src_dir):
         if 'depth' not in root:
             continue
         dir_count += 1
         print(dir_count)
-        path_sp = root.split('\\')
+        path_sp = root.split('/')
         new_root = str(path_sp[0]).replace('cut', 'gamma')
         for p in path_sp[1:]:
             new_root = os.path.join(new_root, p)

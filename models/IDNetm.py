@@ -189,6 +189,6 @@ def IDNetm():
     return model
 
 
-def IDNet():
-    model = idnet(se=True, avgdown=True, merge=False)
-    return model
+# def IDNet():
+#    model = idnet(se=True, avgdown=True, merge=False)
+#    return model
