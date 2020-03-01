@@ -88,7 +88,6 @@ after running commands of model inference on dev and test data, 6 result files w
 $ cd submission
 $ python gen_submit.py
 ```
-zip submission.txt and submit.
 
 ## Combine result
 Assume there are two submit files in /submission:
