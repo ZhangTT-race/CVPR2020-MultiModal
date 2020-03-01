@@ -71,9 +71,9 @@ parser.add_argument('--summary', default=False, type=bool,
                     help='whether to analysis network complexity')
 parser.add_argument('--every-decay', default=40, type=int, help='how many epoch decay the lr')
 parser.add_argument('--fl-gamma', default=3, type=int, help='gamma for Focal Loss')
-parser.add_argument('--modal', default='ir', type=str, help='ir depth or merge')
+parser.add_argument('--modal', default='ir', type=str, help='ir, depth or merge')
 parser.add_argument('--sub', default=1, type=int, help='sub protocol')
-parser.add_argument('--train-val', default=False, type=bool, help='sub protocol')
+parser.add_argument('--train-val', default=False, type=bool, help='whether to test on dev dataset while training')
 
 best_prec1 = 0
 
